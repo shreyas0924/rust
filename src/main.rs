@@ -63,6 +63,15 @@ fn calculate_area(shape: Shape) -> f64 {
     }
 }
 
+fn find_first_a(string: String) -> Option<i32> {
+    for (index, char) in string.chars().enumerate() {
+        if char == 'a' {
+            return Some(index as i32);
+        }
+    }
+    return None;
+}
+
 fn main() {
     // star();
     // strings();
@@ -88,5 +97,13 @@ fn main() {
     match res {
         Ok(content) => print!("Contents of the file - {}", content),
         Err(error) => print!("{}", error),
+    }
+
+    let some_char = String::from("ssssssssn");
+    let ans = find_first_a(some_char);
+
+    match ans {
+        Some(idx) => println!("Index is {}", idx),
+        None => println!("There's no 'a' "),
     }
 }
