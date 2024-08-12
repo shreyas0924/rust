@@ -1,5 +1,59 @@
 use std::{ f64::consts::PI, fs };
 
+//Monomorphization
+#[derive(Debug)]
+enum Option_i32 {
+    Some(i32),
+    None,
+}
+#[derive(Debug)]
+enum Option_f64 {
+    Some(f64),
+    None,
+}
+
+//Traits
+pub trait Summary {
+    fn get_author(&self) -> String;
+
+    fn summarize(&self) -> String {
+        format!("(Read more from {}...)", self.get_author())
+    }
+}
+
+pub struct Tweet {
+    pub username: String,
+    pub content: String,
+    pub reply: bool,
+    pub retweet: bool,
+}
+
+pub struct NewsArticle {
+    pub headline: String,
+    pub location: String,
+    pub author: String,
+    pub content: String,
+}
+
+impl Summary for Tweet {
+    fn get_author(&self) -> String {
+        format!("@{}", self.username)
+    }
+    fn summarize(&self) -> String {
+        format!("{}'s tweet - {}", self.username, self.content)
+    }
+}
+
+fn largest<T: std::cmp::PartialOrd + Copy>(list: &[T]) -> T {
+    let mut largest = list[0];
+    for &item in list {
+        if item > largest {
+            largest = item;
+        }
+    }
+    largest
+}
+
 fn star() {
     let x = 5;
     let y = 5;
@@ -73,9 +127,9 @@ fn find_first_a(string: String) -> Option<i32> {
 }
 
 fn main() {
-    // star();
-    // strings();
-    // mutability();
+    star();
+    strings();
+    mutability();
 
     let mut s1 = String::from("HEllo world");
     let s2 = &mut s1;
@@ -106,4 +160,29 @@ fn main() {
         Some(idx) => println!("Index is {}", idx),
         None => println!("There's no 'a' "),
     }
+
+    let list = vec![1, 2, 3, 4, 5, 6, 7, 8, 9];
+    let largest = largest(&list);
+    println!("The largest number is {}", largest);
+
+    let integer = Option_i32::Some(5);
+    let float = Option_f64::Some(5.0);
+    match integer {
+        Option_i32::Some(i) => println!("{}", i),
+        Option_i32::None => println!("None"),
+    }
+    match float {
+        Option_f64::Some(f) => println!("{}", f),
+        Option_f64::None => println!("None"),
+    }
+
+    let tweet = Tweet {
+        username: String::from("shreyas"),
+        content: String::from("Hello World"),
+        reply: false,
+        retweet: false,
+    };
+
+    println!("Tweet Summary - {}", tweet.summarize());
+    print!("Author is {}", tweet.get_author())
 }
